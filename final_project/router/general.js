@@ -35,7 +35,7 @@ return res.status(404).json({message: "Unable to register user"});
 // Get the book list available in the shop
 public_users.get('/', async function (req, res) {
   try {
-    const response = await axios.get('https://sammythemwa-5000.theianext-0-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/');
+    const response = await axios.get('https://localhost/5000');
      // get all the books data from the response
     const books = response.data;
 
