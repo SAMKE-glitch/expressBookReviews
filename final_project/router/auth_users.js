@@ -3,7 +3,10 @@ const jwt = require('jsonwebtoken');
 let books = require("./booksdb.js");
 const regd_users = express.Router();
 
-let users = [];
+let users = [{
+  "username": "example_user",
+  "password": "password123"
+}];
 
 const isValid = (username)=>{ //returns boolean
   //write code to check is the username is valid
@@ -49,31 +52,35 @@ regd_users.post("/login", (req,res) => {
 });
 
 // Add a book review
+// Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   const isbn = req.params.isbn;
   const review = req.query.review;
-  const { username, password } = req.session.authenticated || {};
+  const username = req.session.username; // Assuming username is stored in the session
 
-  if (!authenticatedUser(username, password)) {
-    return res.status(401).json({ message: "User not authenticated" });
+  if (!username) {
+    return res.status(401).json({ message: "Unauthorized. Please log in to add or modify reviews." });
   }
 
   if (!review) {
     return res.status(400).json({ message: "Review content is required." });
   }
+  if (authenticatedUser(username, password)){
 
-  // Check if the user has already posted a review for the same ISBN
-  const existingReviewIndex = books[isbn].reviews.findIndex((item) => item.username === username);
+    // Check if the user has already posted a review for the same ISBN
+    const existingReviewIndex = books[isbn].reviews.findIndex((item) => item.username === username);
 
-  if (existingReviewIndex !== -1) {
-    // If the user has already posted a review, modify the existing review
-    books[isbn].reviews[existingReviewIndex].review = review;
-    return res.status(200).json({ message: "Review modified successfully." });
+    if (existingReviewIndex !== -1) {
+      // If the user has already posted a review, modify the existing review
+      books[isbn].reviews[existingReviewIndex].review = review;
+      return res.status(200).json({ message: "Review modified successfully." });
   } else {
-    // If the user has not posted a review yet, add a new review
-    books[isbn].reviews.push({ username, review });
-    return res.status(200).json({ message: "Review added successfully." });
+      // If the user has not posted a review yet, add a new review
+      books[isbn].reviews.push({ username, review });
+      return res.status(200).json({ message: "Review added successfully." });
   }
+  }
+
 });
 
 
