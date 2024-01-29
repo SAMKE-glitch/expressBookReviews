@@ -5,7 +5,6 @@ let users = require("./auth_users.js").users;
 const public_users = express.Router();
 const axios = require('axios');
 
-
 const doesExist = (username)=>{
   let usersWithSameName = users.filter((user)=>{
       return user.username === username
