@@ -52,10 +52,10 @@ regd_users.post("/login", (req,res) => {
 regd_users.put("/auth/review/:isbn", (req, res) => {
   const isbn = req.params.isbn;
   const review = req.query.review;
-  const { username } = req.session.authenticated || {};
+  const { username, password } = req.session.authenticated || {};
 
-  if (!username) {
-    return res.status(401).json({ message: "Unauthorized. Please log in to add or modify reviews." });
+  if (!authenticatedUser(username, password)) {
+    return res.status(401).json({ message: "User not authenticated" });
   }
 
   if (!review) {
@@ -75,6 +75,8 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     return res.status(200).json({ message: "Review added successfully." });
   }
 });
+
+
 
 // Delete a book review based on the session username
 regd_users.delete("/auth/review/:isbn", (req, res) => {
