@@ -90,7 +90,7 @@ public_users.get('/books/author/:author',function (req, res) {
         resolve(res.send(JSON.stringify({books}, null, 10)));
     });
     const filterBooks = new Promise((resolve, reject) => {
-        if (book.author === booksByAuthor) {
+        if (books.author === booksByAuthor) {
             resolve(res.send(JSON.stringify({books}, null, 10)));
         }
     });
