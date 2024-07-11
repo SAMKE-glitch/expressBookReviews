@@ -80,8 +80,20 @@ public_users.get('/books/isbn/:isbn', async function filterBooks (req, res) {
   //return res.status(404).json({ message: "Book not found" });
 //}
 //});
-
-// Get book details based on author
+// Get book details based on author 1st method
+public_users.get('/author/:author',function (req, res) {
+    let booksbyauthor = [];
+    let isbns = Object.keys(books);
+    isbns.forEach((isbn) => {
+      if(books[isbn]["author"] === req.params.author) {
+        booksbyauthor.push({"isbn":isbn,
+                            "title":books[isbn]["title"],
+                            "reviews":books[isbn]["reviews"]});
+      }
+    });
+    res.send(JSON.stringify({booksbyauthor}, null, 4));
+  });
+// Get book details based on author 2nd method
 public_users.get('/books/author/:author',function (req, res) {
   //Write your code here
     const booksByAuthor = req.params.author;
@@ -146,6 +158,19 @@ public_users.get('/books/title/:title',function (req, res) {
         })
     })
 });
+// another one 
+public_users.get('/title/:title',function (req, res) {
+    let booksbytitle = [];
+    let isbns = Object.keys(books);
+    isbns.forEach((isbn) => {
+      if(books[isbn]["title"] === req.params.title) {
+        booksbytitle.push({"isbn":isbn,
+                            "author":books[isbn]["author"],
+                            "reviews":books[isbn]["reviews"]});
+      }
+    });
+    res.send(JSON.stringify({booksbytitle}, null, 4));
+  });
 //public_users.get('/title/:title',function (req, res) {
 //Write your code here
 //return res.status(300).json({message: "Yet to be implemented"});
